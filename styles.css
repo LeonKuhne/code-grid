@@ -1,3 +1,7 @@
+:root {
+  --cell-color: #da0;
+}
+
 /**
  * ONE-TO-ONE
 **/ 
@@ -6,6 +10,16 @@ body {
   position: absolute;
   background: black;
   color: white;
+}
+
+
+asm-grid {
+  padding: 2px;
+  gap: 2px;
+  border: 2px solid white;
+  asm-cell {
+    background: var(--cell-color);
+  }
 }
 
 /**
