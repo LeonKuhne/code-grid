@@ -84,5 +84,5 @@ main:
 	.cfi_endproc
 .LFE0:
 	.size	main, .-main
-	.ident	"GCC: (GNU) 13.2.1 20240417"
+	.ident	"GCC: (GNU) 14.1.1 20240522"
 	.section	.note.GNU-stack,"",@progbits

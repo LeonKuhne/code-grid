@@ -1,4 +1,4 @@
-export default class AsmReader {
+export default class Reader {
   constructor(parser) {
     this.parser = parser
   }
@@ -17,8 +17,8 @@ export default class AsmReader {
       })
   }
 
-  read(asmText) {
-    for (let line of asmText.split('\n')) {
+  read(text) {
+    for (let line of text.split('\n')) {
       this.parser.read(line)
     }
   }

@@ -8,10 +8,15 @@
   <script src="script.js" type="module"></script>
   <title>CO:DE:GR:ID</title>
 </head>
-<body class="center">
-  <asm-grid grid-size='10' cell-width="2rem" cell-height="2rem">
-    <asm-cell x="1" y="1" w="1" h="2">mov</asm-cell>
-    <asm-cell x="5" y="7" w="1" h="1">jmp</asm-cell>
-  </asm-grid>
+<body>
+  <div class="center">
+    <asm-grid grid-width="10" grid-height="10" cell-width="2rem" cell-height="2rem"></asm-grid>
+  </div>
+  <!-- add a number input for grid dimentions, x and y-->
+  <div class="settings">
+    <input id="x-dim" type="number" value="10" min="1" max="100" step="1">
+    by
+    <input id="y-dim" type="number" value="10" min="1" max="100" step="1">
+  </div>
 </body>
 </html>

@@ -3,6 +3,6 @@ header "Code Grid"
 debug "visualize arm assembly"
 help .cd | indent
 
-function serve() {
+function run() {
 	python -m http.server 8000
 }
