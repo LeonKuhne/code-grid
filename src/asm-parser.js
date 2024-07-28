@@ -2,38 +2,62 @@ import Pattern from './pattern.js'
 
 export default class AsmParser {
 
-  constructor(patterns) {
+  constructor(patterns, hooks) {
     // patterns
-    this.branch = this.branchPattern(patterns.branchPattern)
-    this.instruct = this.instructPattern(patterns.instructPattern)
+    this.sectionPattern = this.createSectionPattern(patterns.sectionPattern)
+    this.branchPattern = this.createBranchPattern(patterns.branchPattern)
+    this.instructPattern = this.createInstructPattern(patterns.instructPattern)
+    // callbacks
+    this.hooks = hooks
     //state
-    this.branchName = null
-    this.op = null
-    this.args = null
+    this.section = null
+    this.branch = null
+    this.instruction = null
   }
 
-  load(line) {
+  read(line) {
     line = line.split(';')[0] // remove x86/x64 comments 
     line = line.split(' # ')[0] // remove arm/mips comments
     if (line.trim() == "") return // ignore empty lines
-    if (this.branch.exec(line)) return // try to parse as branch
-    if (this.instruct.exec(line)) return // try to parse as instruction
+    // try to parse section
+    if (this.sectionPattern.exec(line))
+      return this.hooks.onSection(this.section)
+    // try to parse branch
+    if (this.branchPattern.exec(line))
+      return this.hooks.onBranch(this.branch)
+    // try to parse instruction
+    if (this.instructPattern.exec(line)) 
+      return this.hooks.onInstruction(this.instruction)
+    console.log("UNKOWN LINE:", line)
   }
 
   // 
   // patterns parsers
 
-  branchPattern(regex) {
+  createSectionPattern(regex) {
     return new Pattern(regex, match => { 
-      this.branchName = match[1]
+      this.section = match[1]
       return true
     })
   }
 
-  instructPattern(regex) {
+  createBranchPattern(regex) {
     return new Pattern(regex, match => { 
-      this.op = match[1]; 
-      this.args = match[2] 
+      this.branch = {
+        lineNumber: parseInt(match[1]),
+        name: match[2]
+      }
+      return true
+    })
+  }
+
+  createInstructPattern(regex) {
+    return new Pattern(regex, match => { 
+      this.instruction = {
+        lineNumber: parseInt(match[1]),
+        op: match[2],
+        args: match[3]
+      }
       return true
     })
   }
