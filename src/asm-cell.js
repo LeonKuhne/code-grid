@@ -1,20 +1,20 @@
-export default class AsmCell extends HTMLElement {
+import Component from './component.js'
+
+export default class AsmCell extends Component {
   constructor() {
     super();
-
     this.config = {
       'mov': { color: 'orange' }
     }
   }
 
-  connectedCallback() {
+  onStyle() {
+    this.style.userSelect = 'none'
+    this.style.overflow = 'hidden'
+  }
+
+  onConnect() {
     console.log("cell connected")
-    const style = document.createElement('style')
-    style.textContent = `:host {
-      user-select: none;
-    }`
-    this.attachShadow({ mode: 'open' })
-    this.shadowRoot.appendChild(style)
     // asm properties
     this.op = this.innerText
     this.next = []

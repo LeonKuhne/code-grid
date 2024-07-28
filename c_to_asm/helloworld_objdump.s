@@ -56,15 +56,16 @@ Disassembly of section .note.gnu.build-id:
  382:	00 00                	add    %al,(%rax)
  384:	47                   	rex.RXB
  385:	4e 55                	rex.WRX push %rbp
- 387:	00 d1                	add    %dl,%cl
- 389:	c0 2a 46             	shrb   $0x46,(%rdx)
- 38c:	fd                   	std
- 38d:	df 31                	fbstp  (%rcx)
- 38f:	4b b8 13 a7 df 51 ea 	rex.WXB movabs $0xf4eb47ea51dfa713,%r8
- 396:	47 eb f4 
- 399:	aa                   	stos   %al,%es:(%rdi)
- 39a:	d2                   	.byte 0xd2
- 39b:	bf                   	.byte 0xbf
+ 387:	00 93 6b 66 a4 5d    	add    %dl,0x5da4666b(%rbx)
+ 38d:	9b                   	fwait
+ 38e:	56                   	push   %rsi
+ 38f:	bc f5 f3 62 8a       	mov    $0x8a62f3f5,%esp
+ 394:	d9 fa                	fsqrt
+ 396:	5f                   	pop    %rdi
+ 397:	ae                   	scas   %es:(%rdi),%al
+ 398:	fc                   	cld
+ 399:	75 28                	jne    3c3 <_init-0xc3d>
+ 39b:	e9                   	.byte 0xe9
 
 Disassembly of section .note.ABI-tag:
 
@@ -882,11 +883,22 @@ Disassembly of section .comment:
    5:	28 47 4e             	sub    %al,0x4e(%rdi)
    8:	55                   	push   %rbp
    9:	29 20                	sub    %esp,(%rax)
-   b:	31 33                	xor    %esi,(%rbx)
-   d:	2e 32 2e             	cs xor (%rsi),%ch
+   b:	31 34 2e             	xor    %esi,(%rsi,%rbp,1)
+   e:	31 2e                	xor    %ebp,(%rsi)
   10:	31 20                	xor    %esp,(%rax)
   12:	32 30                	xor    (%rax),%dh
   14:	32 34 30             	xor    (%rax,%rsi,1),%dh
-  17:	34 31                	xor    $0x31,%al
-  19:	37                   	(bad)
+  17:	35 30 37 00 47       	xor    $0x47003730,%eax
+  1c:	43                   	rex.XB
+  1d:	43 3a 20             	rex.XB cmp (%r8),%spl
+  20:	28 47 4e             	sub    %al,0x4e(%rdi)
+  23:	55                   	push   %rbp
+  24:	29 20                	sub    %esp,(%rax)
+  26:	31 34 2e             	xor    %esi,(%rsi,%rbp,1)
+  29:	31 2e                	xor    %ebp,(%rsi)
+  2b:	31 20                	xor    %esp,(%rax)
+  2d:	32 30                	xor    (%rax),%dh
+  2f:	32 34 30             	xor    (%rax,%rsi,1),%dh
+  32:	35                   	.byte 0x35
+  33:	32 32                	xor    (%rdx),%dh
 	...

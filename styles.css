@@ -10,6 +10,9 @@ body {
   position: absolute;
   background: black;
   color: white;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
 }
 
 
@@ -22,12 +25,30 @@ asm-grid {
   }
 }
 
+.settings {
+  color: #eee;
+  background: #000c;
+  padding: 10px;
+  border-radius: 0.25rem;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 10rem;
+}
+
 /**
  * COMMON 
 **/
 
 .center {
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+input[type="number"] {
+  background: #ffffff00;
+  color: white;
+  border: none;
 }

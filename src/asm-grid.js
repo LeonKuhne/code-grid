@@ -1,39 +1,31 @@
 import Pos from './pos.js'
 import AsmCell from './asm-cell.js'
+import Component from './component.js';
 
-export default class AsmGrid extends HTMLElement {
+export default class AsmGrid extends Component {
   constructor() {
     super();
     this.pos = new Pos(0, 0)
     this.taken = {}
   }
 
-  connectedCallback() {
-    console.log("grid connected")
-    this.gridSize = this.intArg('grid-size')
-    this.style()
-    this.pan()
-    this.zoom()
+  resize(width=null, height=null) {
+    if (width != null) this.setAttribute('grid-width', width)
+    if (height != null) this.setAttribute('grid-height', height)
+    this._resize()
   }
 
+  onStyle() {
+    this.style.display = 'grid'
+    this.style.position = 'absolute'
+    this.style.transform = 'translate(-50%, -50%)'
+    this._resize(this.intArg("grid-width"), this.intArg("grid-height"))
+  }
 
-  //
-  // setup
-
-  style() {
-    const cellWidth = this.intArg('cell-width')
-    const cellHeight = this.intArg('cell-height')
-    const style = document.createElement('style')
-    style.textContent = `:host {
-      display: grid;
-      grid-template-columns: repeat(${this.gridSize}, ${cellWidth}rem);
-      grid-template-rows: repeat(${this.gridSize}, ${cellHeight}rem);
-      position: absolute;
-      transform: translate(-50%, -50%);
-    }`
-    this.parentElement.style.overflow = 'hidden'
-    this.attachShadow({ mode: 'open' })
-    this.shadowRoot.appendChild(style)
+  onConnect() {
+    console.log("grid connected")
+    this.pan()
+    this.zoom()
   }
 
   pan() {
@@ -80,9 +72,9 @@ export default class AsmGrid extends HTMLElement {
   }
 
   stepPos() { // find the next available cell
-    const next = this.freeNeighbors(this.pos)
+    const next = this._freeNeighbors(this.pos)
     if (next.length) { this.pos = next[0]; return }
-    this.gridSize += 1
+    this.resize(this.width+1, this.height+1)
     this.stepPos()
   }
 
@@ -90,22 +82,29 @@ export default class AsmGrid extends HTMLElement {
   // 
   // helpers
 
-  freeNeighbors(pos) {
-    let neighbors = this.neighbors(pos)
+  _freeNeighbors(pos) {
+    let neighbors = this._neighbors(pos)
     return neighbors.filter(pos => {
       // keep in bounds
       if (pos.x < 0 || pos.y < 0) return false
-      if (pos.x >= this.gridSize || pos.y >= this.gridSize) return false
+      if (pos.x >= this.width || pos.y >= this.height ) return false
       return !(pos.key() in this.taken)
     })
   }
 
-  neighbors(pos) {
+  _neighbors(pos) {
     return [
       new Pos(pos.x + 1, pos.y),
       new Pos(pos.x - 1, pos.y),
       new Pos(pos.x, pos.y + 1),
       new Pos(pos.x, pos.y - 1)
     ]
+  }
+
+  _resize() {
+    this.width = this.intArg('grid-width')
+    this.height = this.intArg('grid-height')
+    this.style.gridTemplateColumns = `repeat(${this.width}, ${this.intArg('cell-width')}rem)`
+    this.style.gridTemplateRows = `repeat(${this.height}, ${this.intArg('cell-height')}rem)`
   }
 }
