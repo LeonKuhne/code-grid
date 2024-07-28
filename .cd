@@ -1,0 +1,8 @@
+#!/bin/bash
+header "Code Grid"
+debug "visualize arm assembly"
+help .cd | indent
+
+function serve() {
+	python -m http.server 8000
+}
