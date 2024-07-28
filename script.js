@@ -39,5 +39,5 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // open the local asm file 'helloworld.asm'
-  reader.dispatchUrlUpload('helloworld.asm')
+  reader.dispatchUrlUpload('helloworld.s')
 })
